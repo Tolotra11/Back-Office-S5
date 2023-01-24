@@ -3,22 +3,18 @@ import Navbarre from '../components/Navbar';
 import Table from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-
+import Nav from 'react-bootstrap/Nav';
+import { Link, useNavigate } from "react-router-dom";
 const ListCat = () =>{
-   
+   const navigate = useNavigate();
     const [nomCat, setNomCat] = useState('');
     var tok = localStorage.getItem("token");
-    const [error,setError] = useState("");
-    const [succes,setSucces] = useState("");
     var json;
     if(tok == null){
         tok = "";
     }
     const insert = async() =>{
-        setError("");
-        setSucces("");
-        await fetch(`http://localhost:8082/categories`,{
+        await fetch(`https://encheres5-production-a21f.up.railway.app/categories`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -32,10 +28,26 @@ const ListCat = () =>{
         .then(res => {
             json = res.success;
             if(json == null){
-                setError(res.error);
+                
             }
             else{
-                window.location.reload();
+                setLoading(true);
+                fetch(`https://encheres5-production-a21f.up.railway.app/categories`,{
+                        method : 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Access-Control-Allow-Origin': '*',
+                            'Content-Type': 'application/json',
+                            'token': `${tok}`
+                        }
+                    })
+                    .then(data => data.json())
+                    .then(
+                        res =>{
+                            setList(res.data);
+                            setLoading(false);
+                        }
+                    )
             }
         });
     };
@@ -43,7 +55,7 @@ const ListCat = () =>{
     const [loading , setLoading] = useState(false);
     useEffect(() => {
         setLoading(true);
-        fetch(`http://localhost:8082/categories`,{
+        fetch(`https://encheres5-production-a21f.up.railway.app/categories`,{
             method : 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -56,10 +68,11 @@ const ListCat = () =>{
         .then(
             res =>{
                 setList(res.data);
+                setLoading("");
                 setLoading(false);
             }
         )
-    },[]);
+    },[tok]);
 
     if (loading){
         return <div><Navbarre/>
@@ -69,7 +82,7 @@ const ListCat = () =>{
         return <tr>
                 <td>{group.id}</td>
                 <td>{group.nomCat}</td>
-                <td><a href={"/modifCat/"+group.id}><button className='btn btn-success'>Modifier</button></a></td>
+                <td><Nav.Link as={Link} to={"/modifCat/"+group.id}><button className='btn btn-success'>Modifier</button></Nav.Link></td>
             </tr>
     }
     );

@@ -9,11 +9,10 @@ const CatForm = () => {
     if(tok == null){
         tok = "";
     }
-    const [loading , setLoading] = useState(false);
     const insert = async() =>{
         setError("");
         setSucces("");
-        await fetch(`http://localhost:8082/categories`,{
+        await fetch(`https://encheres5-production-a21f.up.railway.app/categories`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

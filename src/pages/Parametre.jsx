@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import Navbarre from "../components/Navbar";
-import Navbar from '../components/Navbar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useNavigate } from "react-router-dom";
 const Parametre = () => {
+    const navigate = useNavigate();
     var tok = localStorage.getItem("token");
     if(tok == null){
         tok = "";
@@ -16,7 +17,7 @@ const Parametre = () => {
     const [loading , setLoading] = useState(false);
     useEffect(() => { 
         setLoading(true);
-         fetch(`http://localhost:8082/parametres`,{
+         fetch(`https://encheres5-production-7c08.up.railway.app/parametres`,{
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -32,14 +33,14 @@ const Parametre = () => {
             setDureeMax(res.data.dureeEnchereMax);
             setLoading(false);
         });
-    },[]);
+    },[tok]);
     if (loading){
         return <div><Navbarre/>
         <p>loading...</p></div>;
     }
     const parametrage = async() => {
         setError('');
-        await fetch(`http://localhost:8082/parametres`,{
+        await fetch(`https://encheres5-production-a21f.up.railway.app/parametres`,{
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -55,7 +56,23 @@ const Parametre = () => {
                 setError(res.error.message);
             }
             else{
-                window.location.reload();
+                setLoading(true);
+         fetch(`https://encheres5-production-a21f.up.railway.app/parametres`,{
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+                'token': `${tok}`
+              }
+        })
+        .then(response => response.json())
+        .then(res => {
+            setCommission(res.data.commission);
+            setDureeMin(res.data.dureeEnchereMin);
+            setDureeMax(res.data.dureeEnchereMax);
+            setLoading(false);
+        });
             }
         })
     };

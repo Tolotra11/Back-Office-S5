@@ -1,14 +1,12 @@
 import './App.css';
 import Login from "./pages/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Acceuil from './pages/Acceuil';
 import ListCat from './pages/ListCat';
 import CatForm from './pages/CatForm';
 import ModifCat from './pages/ModifCat';
 import Parametre from './pages/Parametre';
 import ListDemandeRechargement from './pages/ListeDemandeRechargement';
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from './components/Navbar';
 import Stat from './pages/Stat';
 import Deconnect from './pages/Deconnect';
 
@@ -28,6 +26,7 @@ function App() {
      <Route path="/stat" element={<Stat/>}></Route>
      <Route path="/deconnexion" element={<Deconnect/>}></Route>
     </Routes>
+    <div><p className='text-center'>ETU001462-ETU001503-ETU001438</p></div>
   </BrowserRouter>
   );
 }

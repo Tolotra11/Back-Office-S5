@@ -1,7 +1,6 @@
 import { useEffect,useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend ,BarChart,Bar,CartesianGrid,XAxis,YAxis} from "recharts";
 import Navbarre from '../components/Navbar';
-import Navbar from '../components/Navbar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -33,7 +32,7 @@ const Stat = () => {
     const [data2,setData2] = useState([]);
     useEffect(() => { 
         setLoading(true);
-        fetch(`http://localhost:8082/statistiques`,{
+        fetch(`https://encheres5-production-a21f.up.railway.app/statistiques`,{
            method: 'GET',
            headers: {
                'Accept': 'application/json',
@@ -48,7 +47,7 @@ const Stat = () => {
           setData2(res.data[1].object);
           setLoading(false);
        });
-   },[]);
+   },[tok]);
    if (loading){
     return <div><Navbarre/>
     <p>loading...</p></div>;

@@ -1,5 +1,11 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 const Deconnect = () => {
+    const navigate = useNavigate();
     localStorage.removeItem("token");
-    window.location.href = "/";
+    useEffect( () =>{
+        navigate("/");
+    });
+   
 };
 export default Deconnect;

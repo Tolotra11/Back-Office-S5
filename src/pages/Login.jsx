@@ -1,13 +1,14 @@
 import { useState } from "react";
-import Navbar from '../components/Navbar';
+import { useNavigate } from "react-router-dom";
 const Login =() => {
     const [identifiant, setIdentifiant] = useState("root");
     const [pwd, setPwd] = useState("root");
     const [error,setError] = useState("");
+    const navigate = useNavigate();
     var json;
-    const [loading , setLoading] = useState(false);
     const log = async() =>{
-        await fetch(`http://localhost:8082/loginAdmin`,{
+        
+        await fetch(`https://encheres5-production-a21f.up.railway.app/loginAdmin`,{
             method : 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -26,7 +27,7 @@ const Login =() => {
             else{
                 console.log('marina');
                 localStorage.setItem('token', json.token);
-                window.location.href = "/acceuil";
+                navigate('/acceuil');
             }
         })
     };

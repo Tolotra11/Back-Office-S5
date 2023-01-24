@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import Navbarre from "../components/Navbar";
-import Navbar from '../components/Navbar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 const ListDemandeRechargement = () =>{
-    
     const [group, setGroup] = useState([]);
     var tok = localStorage.getItem("token");
     if(tok == null){
@@ -14,7 +12,7 @@ const ListDemandeRechargement = () =>{
     const [loading , setLoading] = useState(false);
     useEffect(() => {
         setLoading(true);
-        fetch(`http://localhost:8082/demandeCredits`,{
+        fetch(`https://encheres5-production-a21f.up.railway.app/demandeCredits`,{
             method : 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -30,13 +28,13 @@ const ListDemandeRechargement = () =>{
                 setLoading(false);
             }
         )
-    },[]);
+    },[tok]);
     if (loading){
         return <div><Navbarre/>
         <p>loading...</p></div>;
     }
     const accept = async (id) => {
-        await fetch(`http://localhost:8082/validationCredits/${id}`,{
+        await fetch(`https://encheres5-production-a21f.up.railway.app/validationCredits/${id}`,{
             method : 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -48,12 +46,28 @@ const ListDemandeRechargement = () =>{
         .then(data => data.json())
         .then(
             res =>{
-                window.location.reload();
+                setLoading(true);
+        fetch(`https://encheres5-production-a21f.up.railway.app/demandeCredits`,{
+            method : 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+                'token': `${tok}`
+              }
+        })
+        .then(data => data.json())
+        .then(
+            res =>{
+                setGroup(res.data);
+                setLoading(false);
+            }
+        )
             }
         )
     }
     const refuse = async (id) => {
-        await fetch(`http://localhost:8082/refuserCredits/${id}`,{
+        await fetch(`https://encheres5-production-a21f.up.railway.app/refuserCredits/${id}`,{
             method : 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -65,7 +79,23 @@ const ListDemandeRechargement = () =>{
         .then(data => data.json())
         .then(
             res =>{
-                window.location.reload();
+                setLoading(true);
+        fetch(`https://encheres5-production-a21f.up.railway.app/demandeCredits`,{
+            method : 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+                'token': `${tok}`
+              }
+        })
+        .then(data => data.json())
+        .then(
+            res =>{
+                setGroup(res.data);
+                setLoading(false);
+            }
+        )
             }
         )
     }

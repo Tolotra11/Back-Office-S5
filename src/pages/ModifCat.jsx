@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import {  useParams } from 'react-router-dom';
 import Navbarre from "../components/Navbar";
-import Navbar from '../components/Navbar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useNavigate } from "react-router-dom";
 const ModifCat =() => {
+    const navigate = useNavigate();
     var tok = localStorage.getItem("token");
     if(tok == null){
         tok = "";
@@ -17,7 +18,7 @@ const ModifCat =() => {
     let  {idCat}   = useParams();
     useEffect(() => {
         setLoading(true);
-        fetch(`http://localhost:8082/categories/${idCat}`,{
+        fetch(`https://encheres5-production-7c08.up.railway.app/categories/${idCat}`,{
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -34,14 +35,14 @@ const ModifCat =() => {
             setLoading(false);
         });
 
-    },[idCat, setGroup]);
+    },[idCat, tok]);
     if (loading){
         return <div><Navbarre/>
         <p>loading...</p></div>;
     }
     const modify = async(id) => {
         setError("");
-        await fetch(`http://localhost:8082/categories/${idCat}`,{
+        await fetch(`https://encheres5-production-a21f.up.railway.app/categories/${id}`,{
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -59,7 +60,7 @@ const ModifCat =() => {
                 setError(res.error.message);
             }
             else{
-                window.location.href = "/listeCategorie";
+                navigate("/listeCategorie");
             }
         });
     };
